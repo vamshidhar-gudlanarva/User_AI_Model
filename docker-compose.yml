@@ -1,12 +1,18 @@
 version: "3.9"
 
 services:
- app:
-  build:
-    context: .
-  ports:
-    - "8000:8000"
-  volumes:
-    - ./app:/app
-  command: >
-    sh -c "python manage.py runserver 0.0.0.0:8000"
+  app:
+    build:
+      context: .
+      args:
+        DEV: "true"  # Explicitly set the DEV build argument
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app  # Mount the app directory for live updates
+      - ./requirements.txt:/tmp/requirements.txt
+      - ./requirements.dev.txt:/tmp/requirements.dev.txt
+    working_dir: /app
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
+
